@@ -204,7 +204,6 @@ const onRefreshConfirm = async (isIncremental: boolean) => {
         } else {
             urlObj.pathname = '/common/gacha_record/api/getGachaLog';
         }
-        console.log(gachaTypeName, urlObj.href)
         let cnt = 0;
         let endId = '0';
         let exitFlag = false;
@@ -280,14 +279,16 @@ const onRefreshConfirm = async (isIncremental: boolean) => {
         warningSpan.innerHTML = '未获取到跃迁记录<br>请确认游戏内是否可以查询到跃迁记录';
         return;
     }
-    warningSpan.innerHTML = `UID: ${fetchingGachaUid ?? data.info['uid']} 跃迁记录请求完成<br>共获取 ${data.list.length} 条记录`;
     if (data.list.length) {
+        warningSpan.innerHTML = `UID: ${fetchingGachaUid ?? data.info['uid']} 跃迁记录请求完成<br>共获取 ${data.list.length} 条记录，数据保存中`;
         const ret = await userGachaStore.refreshGachaData('srgf_v1.0', data);
         if (ret['msg'] === 'OK') {
-            warningSpan.innerHTML = `UID: ${fetchingGachaUid ?? data.info['uid']} 跃迁记录请求完成<br>共获取 ${data.list.length} 条记录，数据已保存`;
+            warningSpan.innerHTML = `UID: ${fetchingGachaUid ?? data.info['uid']} 跃迁记录请求完成<br>共获取 ${data.list.length} 条记录，数据已保存，点击空白区域关闭浮层`;
         } else {
             warningSpan.innerHTML = ret['msg'];
         }
+    } else {
+        warningSpan.innerHTML = `UID: ${fetchingGachaUid ?? data.info['uid']} 跃迁记录请求完成<br>未获取到新记录，点击空白区域关闭浮层`;
     }
 };
 const onGetUrlConfirm = async () => {
